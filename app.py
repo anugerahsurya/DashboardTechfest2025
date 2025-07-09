@@ -3,6 +3,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
+import geopandas as gpd
+from matplotlib.patches import Patch
 
 st.markdown("""
     <style>
@@ -69,7 +71,7 @@ menu = st.sidebar.selectbox(
     ]
 )
 
-st.sidebar.markdown("<br><br><br><br><br><br><br><br><br><br>", unsafe_allow_html=True)
+st.sidebar.markdown("<br><br><br><br><br>", unsafe_allow_html=True)
 
 # Identitas tim
 st.sidebar.markdown("""---""")
@@ -196,7 +198,69 @@ if menu == "Perbandingan Pagu dan Realisasi TKDD":
     **Kesimpulan:**  
     Meskipun alokasi anggaran bervariasi antarprovinsi, tingkat serapan dana cenderung relatif seragam. Namun, tetap terdapat ruang untuk perbaikan, terutama di wilayah dengan tantangan geografis dan fiskal, guna meningkatkan efektivitas pelaksanaan anggaran secara nasional.
     """)
-   
+    # ========== 3. Peta Realisasi TKDD ==========  
+    st.subheader("Peta Sebaran Persentase Realisasi TKDD per Provinsi (2023)")
+
+    # Load GeoJSON
+    url = "https://raw.githubusercontent.com/ardian28/GeoJson-Indonesia-38-Provinsi/refs/heads/main/Provinsi/38%20Provinsi%20Indonesia%20-%20Provinsi.json"
+    gdf = gpd.read_file(url)
+
+    # Salin dan normalisasi data
+    data_tkdd = data_clean_tkdd.copy()
+    nama_mapping = {
+        "DI YOGYAKARTA": "DAERAH ISTIMEWA YOGYAKARTA",
+        "KEP. BANGKA BELITUNG": "KEPULAUAN BANGKA BELITUNG",
+        "KEP. RIAU": "KEPULAUAN RIAU"
+    }
+    data_tkdd["Provinsi"] = data_tkdd["Provinsi"].replace(nama_mapping)
+    data_tkdd["Provinsi_clean"] = data_tkdd["Provinsi"].str.upper().str.strip()
+    gdf["Provinsi_clean"] = gdf["PROVINSI"].str.upper().str.strip()
+
+    # Merge
+    merged = gdf.merge(data_tkdd, on="Provinsi_clean", how="left")
+
+    # Plot
+    fig3, ax3 = plt.subplots(figsize=(14, 10))
+    merged.plot(
+        column='Persentase Realisasi TKDD',
+        cmap='viridis',
+        linewidth=0.5,
+        ax=ax3,
+        edgecolor='0.5',
+        legend=True,
+        legend_kwds={
+            'label': "% Realisasi TKDD",
+            'shrink': 0.3,
+            'aspect': 10,
+            'orientation': 'vertical',
+            'pad': 0.01
+        },
+        missing_kwds={
+            'color': 'lightgrey',
+            'edgecolor': '0.5',
+            'label': 'Data Tidak Tersedia'
+        }
+    )
+
+    # Tambahkan legend manual
+    missing_patch = Patch(facecolor='lightgrey', edgecolor='0.5', label='Data Tidak Tersedia')
+    ax3.legend(handles=[missing_patch], loc='lower left', title='Keterangan')
+
+    ax3.set_title('Peta Realisasi TKDD per Provinsi (%) Tahun 2023')
+    ax3.axis('off')
+    plt.tight_layout()
+    st.pyplot(fig3)
+
+    st.markdown("""
+### Penjelasan Peta Realisasi TKDD
+
+Peta realisasi TKDD tahun 2023 menunjukkan bahwa sebagian besar provinsi di Indonesia mampu merealisasikan anggaran TKDD dengan baik, bahkan beberapa provinsi seperti **Kalimantan Tengah** dan **Kalimantan Selatan** mencatat realisasi di atas 110% dari pagu. Hal ini mencerminkan adanya tambahan kebutuhan atau optimalisasi anggaran di wilayah tersebut.
+
+Sebaliknya, beberapa provinsi di kawasan timur, khususnya **Papua**, memiliki tingkat realisasi yang relatif lebih rendah, meskipun umumnya tetap di atas 95%. **Sulawesi Utara** tidak memiliki data yang tersedia, sehingga tidak dianalisis lebih lanjut.
+
+Secara keseluruhan, peta ini menunjukkan bahwa realisasi TKDD cukup merata, namun masih terdapat variasi antarwilayah yang mencerminkan perbedaan kapasitas fiskal, kebutuhan pembangunan, dan efisiensi pelaksanaan anggaran.
+""")
+ 
 
 elif menu == "Persentase Realisasi TKDD per Provinsi (2023)":
     st.subheader("Persentase Realisasi TKDD per Provinsi (2023)")
@@ -331,7 +395,7 @@ Tidak tampak korelasi yang jelas antara pertumbuhan ekonomi dengan realisasi TKD
     corr_target = corr_matrix[['Realisasi TKDD']].drop('Realisasi TKDD')
 
     fig2, ax = plt.subplots(figsize=(6, 6))
-    sns.heatmap(corr_target, annot=True, cmap='coolwarm', center=0, fmt=".2f", ax=ax)
+    sns.heatmap(corr_target, annot=True, cmap='Blues', center=0, fmt=".2f", ax=ax)
     plt.title('Korelasi terhadap Realisasi TKDD')
     st.pyplot(fig2)
     st.markdown("""
@@ -588,7 +652,7 @@ elif menu == "Analisis Faktor-faktor yang Mempengaruhi IPM":
     corr_target = corr_matrix[['IPM']].drop('IPM')
 
     fig2, ax = plt.subplots(figsize=(6, 6))
-    sns.heatmap(corr_target, annot=True, cmap='coolwarm', center=0, fmt=".2f", ax=ax)
+    sns.heatmap(corr_target, annot=True, cmap='Blues', center=0, fmt=".2f", ax=ax)
     plt.title('Korelasi terhadap IPM')
     st.pyplot(fig2)
     st.markdown("""
