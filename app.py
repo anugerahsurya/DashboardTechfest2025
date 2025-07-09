@@ -68,6 +68,17 @@ menu = st.sidebar.selectbox(
         "Analisis Faktor-faktor yang Mempengaruhi IPM"
     ]
 )
+# ======================================
+# Footer Identitas
+st.markdown("""---""")
+st.markdown("""
+**Disusun oleh:**  
+
+**Tim PopCorn**
+Anugerah Surya Atmaja  
+Naufal Fadli Muzakki
+""")
+
 
 # ======================================
 # Load data
