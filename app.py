@@ -68,16 +68,21 @@ menu = st.sidebar.selectbox(
         "Analisis Faktor-faktor yang Mempengaruhi IPM"
     ]
 )
-# ======================================
-# Footer Identitas
-st.markdown("""---""")
-st.markdown("""
+
+st.sidebar.markdown("<br><br><br><br><br><br><br><br><br><br>", unsafe_allow_html=True)
+
+# Identitas tim
+st.sidebar.markdown("""---""")
+st.sidebar.markdown("""
 **Disusun oleh:**  
 
-**Tim PopCorn**
+**Tim PopCorn**  
 Anugerah Surya Atmaja  
 Naufal Fadli Muzakki
 """)
+# ======================================
+# Footer Identitas
+st.markdown("""---""")
 
 
 # ======================================
@@ -370,36 +375,35 @@ Bahkan, variabel seperti **persentase penduduk miskin** dan **APBN per kapita** 
         'p-value': '{:.4f}'
     }))
     st.markdown("""
-### Penjelasan:
+### Penjelasan Hasil Regresi Linear Berganda terhadap Realisasi TKDD
 
-Berdasarkan hasil **regresi linear berganda terhadap Realisasi TKDD**, hanya beberapa variabel yang terbukti berpengaruh secara signifikan pada taraf signifikansi 5%.  
+Berdasarkan hasil regresi linear berganda terhadap **Realisasi TKDD**, hanya beberapa variabel yang terbukti berpengaruh secara signifikan pada taraf signifikansi 5%.
 
-- **Pagu TKDD** menunjukkan pengaruh paling dominan dengan koefisien positif dan sangat signifikan, menegaskan bahwa alokasi awal anggaran merupakan faktor utama yang menentukan besarnya realisasi TKDD.  
-- Selain itu, **PDRB atas dasar harga berlaku** dan **PDRB per kapita** juga memiliki pengaruh signifikan secara statistik pada tingkat kepercayaan 95%, meskipun dengan arah pengaruh yang berbeda:
-  - PDRB atas dasar harga berlaku → **berdampak negatif**
-  - PDRB per kapita → **berdampak positif**
+Variabel **Pagu TKDD** menunjukkan pengaruh paling dominan dengan koefisien positif dan sangat signifikan. Hal ini menegaskan bahwa **alokasi awal anggaran merupakan faktor utama yang menentukan besarnya realisasi TKDD**, karena pada dasarnya realisasi belanja mengikuti pola pagu yang telah ditetapkan sejak awal tahun anggaran.
 
-Sebaliknya, variabel seperti **IPM**, **jumlah penduduk**, **APBN per kapita**, dan **laju pertumbuhan ekonomi** **tidak signifikan** terhadap realisasi TKDD. Ini menunjukkan bahwa perubahan pada variabel-variabel tersebut tidak secara konsisten berkaitan dengan perubahan realisasi anggaran.  
+Selain itu, variabel **PDRB Atas Dasar Harga Berlaku** memiliki pengaruh yang signifikan namun berdampak negatif terhadap realisasi TKDD. Artinya, **semakin besar total nilai produksi barang dan jasa suatu daerah (tanpa memperhitungkan inflasi), justru semakin rendah realisasi TKDD**. Hal ini dapat dijelaskan oleh asumsi bahwa daerah dengan PDRB tinggi sudah memiliki kapasitas fiskal yang memadai sehingga mendapatkan alokasi transfer yang lebih terbatas.
 
-Sementara itu, **persentase penduduk miskin** memiliki **p-value mendekati 0.05** (sekitar 0.055), yang menunjukkan **kecenderungan pengaruh negatif**, namun belum cukup kuat untuk dinyatakan signifikan secara statistik.
+Sebaliknya, variabel **PDRB per Kapita Harga Berlaku** menunjukkan pengaruh yang signifikan dan berdampak positif terhadap realisasi TKDD. Artinya, **semakin tinggi produktivitas ekonomi rata-rata per individu**, maka realisasi dana transfer juga cenderung lebih besar. Hal ini bisa mencerminkan bahwa daerah dengan produktivitas per kapita tinggi memiliki kapasitas kelembagaan yang baik dalam menyerap anggaran.
 
----
+Sementara itu, variabel-variabel lain seperti:
+- Indeks Pembangunan Manusia (IPM)  
+- Jumlah Penduduk  
+- Anggaran APBN per Kapita  
+- Laju Pertumbuhan PDRB  
 
-### Interpretasi Koefisien Regresi pada Variabel Signifikan :
+tidak menunjukkan pengaruh signifikan terhadap realisasi TKDD. Artinya, perubahan pada variabel-variabel tersebut tidak secara konsisten berkaitan dengan besarnya realisasi anggaran.
 
-1. **Pagu TKDD**  
-   - Peningkatan **1 satuan** pada variabel ini dapat meningkatkan **Realisasi TKDD sebesar Rp 1,069**.  
-   - Ini menunjukkan hubungan linier yang sangat kuat, karena realisasi umumnya mengikuti alokasi.
+Variabel **Persentase Penduduk Miskin** memiliki p-value yang mendekati batas signifikansi (sekitar 0,055), yang mengindikasikan **potensi pengaruh negatif**, namun belum cukup kuat untuk dianggap signifikan secara statistik pada taraf 5%.
 
-2. **PDRB Atas Dasar Harga Berlaku**  
-   - Peningkatan **1 satuan** dapat menurunkan Realisasi TKDD sebesar **Rp 1.890.000**.  
-   - Kemungkinan karena daerah dengan PDRB tinggi sudah memiliki sumber daya mandiri atau tergolong daerah maju, sehingga menerima TKDD lebih kecil sesuai prinsip kesetaraan.
+**Interpretasi Kuantitatif Variabel Signifikan:**
 
-3. **PDRB Per Kapita HB**  
-   - Peningkatan **1 satuan** dapat meningkatkan Realisasi TKDD sebesar **Rp 18.680**.  
-   - Ini menunjukkan bahwa meskipun daerah tersebut produktif, pemerintah tetap memberikan alokasi dasar, dan ada sedikit efek positif dari peningkatan produktivitas per individu.
+1. **Setiap peningkatan 1 rupiah pada Pagu TKDD** dapat meningkatkan Realisasi TKDD sebesar **1,069 rupiah**. Hal ini mencerminkan hubungan linier yang sangat kuat antara alokasi awal dan realisasi anggaran.
 
+2. **Setiap peningkatan 1 miliar rupiah pada PDRB Atas Dasar Harga Berlaku** berpotensi menurunkan Realisasi TKDD sebesar **1.890.709 rupiah**. Ini menggambarkan bahwa daerah dengan kapasitas ekonomi tinggi mungkin mendapatkan alokasi lebih kecil karena telah dianggap mandiri secara fiskal.
+
+3. **Setiap peningkatan 1 rupiah pada PDRB Per Kapita HB** dapat meningkatkan Realisasi TKDD sebesar **18.680 rupiah**. Ini menunjukkan bahwa meskipun daerah tersebut tergolong mampu, peningkatan produktivitas individu tetap berkaitan dengan penyaluran dana transfer secara marginal.
 """)
+
 
 
 
@@ -486,7 +490,7 @@ Berdasarkan **scatter plot antara Indeks Pembangunan Manusia (IPM) dan Realisasi
         st.warning("Keputusan: Gagal tolak H0 → Tidak terdapat hubungan antara Kategori IPM dan Kategori Persentase Realisasi TKDD.")
     
     st.markdown("""
-### 📊 Penjelasan:
+### Penjelasan:
 
 Berdasarkan hasil **analisis tabel kontingensi dan uji Chi-Square**, diperoleh bahwa **tidak terdapat hubungan yang signifikan** antara **kategori Indeks Pembangunan Manusia (IPM)** dan **kategori persentase realisasi TKDD** pada taraf signifikansi 5%.
 
@@ -655,39 +659,29 @@ Begitu pula:
     }))
     
     st.markdown("""
-### Penjelasan:
+### Penjelasan Hasil Regresi Linear Berganda terhadap IPM
 
-Berdasarkan hasil **regresi linear berganda terhadap IPM**, hanya beberapa variabel yang menunjukkan pengaruh **signifikan** pada taraf signifikansi 5%.
+Berdasarkan hasil regresi linear berganda terhadap **Indeks Pembangunan Manusia (IPM)**, hanya beberapa variabel yang menunjukkan pengaruh signifikan pada taraf signifikansi 5%. Variabel yang signifikan adalah **Jumlah Penduduk** dan **Persentase Penduduk Miskin**.
 
-- Variabel yang paling signifikan adalah **Persentase Penduduk Miskin**, dengan arah pengaruh **negatif** dan nilai koefisien cukup besar.  
-  Ini mengindikasikan bahwa peningkatan kemiskinan berdampak kuat dalam **menurunkan IPM** suatu daerah.
-- Selain itu, variabel **PDRB per Kapita HB** dan **PDRB Atas Dasar Harga Berlaku** juga berpengaruh signifikan secara statistik, keduanya menunjukkan **pengaruh positif** terhadap IPM.  
-  Artinya, kekuatan ekonomi, baik secara total maupun per individu, memiliki kontribusi terhadap kualitas pembangunan manusia.
+Variabel yang paling signifikan adalah **Persentase Penduduk Miskin**, dengan p-value sangat kecil dan koefisien negatif. Hal ini menunjukkan bahwa peningkatan tingkat kemiskinan berdampak signifikan dalam menurunkan IPM suatu daerah. Oleh karena itu, **penurunan angka kemiskinan menjadi faktor kunci dalam mendorong pembangunan manusia**.
 
----
+Selain itu, variabel **Jumlah Penduduk** juga berpengaruh signifikan dengan koefisien negatif. Artinya, provinsi dengan jumlah penduduk yang lebih besar cenderung memiliki IPM yang lebih rendah. Ini dapat mengindikasikan bahwa tingginya jumlah penduduk menimbulkan tantangan dalam penyediaan layanan dasar seperti pendidikan, kesehatan, dan infrastruktur, sehingga menghambat peningkatan IPM.
 
-Sebaliknya, variabel seperti:
+Sementara itu, variabel-variabel lain seperti:
+- Realisasi TKDD  
+- Pagu TKDD  
+- Anggaran APBN per Kapita  
+- PDRB Atas Dasar Harga Berlaku  
+- PDRB per Kapita Harga Berlaku  
+- Laju Pertumbuhan PDRB  
 
-- **Realisasi TKDD**,  
-- **Pagu TKDD**,  
-- **Jumlah Penduduk**,  
-- **Anggaran APBN per Kapita**,  
-- **Laju Pertumbuhan Ekonomi**,  
+tidak menunjukkan pengaruh yang signifikan terhadap IPM pada taraf signifikansi 5%. Ini mengindikasikan bahwa **besarnya anggaran atau pertumbuhan ekonomi tidak otomatis meningkatkan IPM**, apabila tidak disertai pemerataan dan efektivitas distribusi manfaat pembangunan.
 
-tidak memiliki pengaruh signifikan terhadap IPM pada tingkat signifikansi 5%.  
-Ini menunjukkan bahwa **besarnya anggaran maupun pertumbuhan ekonomi tidak serta-merta meningkatkan kesejahteraan manusia**, jika tidak disertai dengan distribusi dan pemanfaatan yang efektif.
+**Interpretasi Kuantitatif Variabel Signifikan:**
 
----
+1. **Setiap peningkatan 1% Persentase Penduduk Miskin** diperkirakan menurunkan IPM sebesar **0,454** poin. Hal ini menegaskan bahwa pengentasan kemiskinan sangat krusial dalam upaya meningkatkan kualitas pembangunan manusia.
 
-### Interpretasi Faktor Signifikan:
-
-1. **Penurunan 1% pada Persentase Penduduk Miskin** dapat **meningkatkan IPM secara signifikan**.  
-   Ini menunjukkan bahwa **pengentasan kemiskinan merupakan strategi paling krusial** dalam mendorong pembangunan manusia yang berkelanjutan.
-
-2. **Peningkatan 1 satuan pada PDRB per Kapita HB** berkontribusi **positif terhadap IPM**.  
-   Artinya, ketika **rata-rata pendapatan masyarakat meningkat**, kualitas hidup seperti pendidikan, kesehatan, dan daya beli juga cenderung membaik.
-
-3. **Peningkatan 1 satuan pada PDRB Atas Dasar Harga Berlaku** juga berkontribusi positif terhadap IPM, meskipun **pengaruhnya tidak sekuat variabel per kapita**.  
-   Ini menandakan bahwa **kekuatan ekonomi total daerah juga mendorong pembangunan manusia**.
+2. **Setiap peningkatan 1 orang dalam jumlah penduduk** diperkirakan menurunkan IPM sebesar **0.000000128** poin. Ini menunjukkan pentingnya pemerataan pembangunan agar peningkatan populasi tidak memperburuk kualitas hidup masyarakat.
 """)
+
 
