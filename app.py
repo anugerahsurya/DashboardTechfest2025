@@ -1,10 +1,14 @@
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
 import seaborn as sns
 import geopandas as gpd
 from matplotlib.patches import Patch
+import scipy.stats as stats
+from scipy.stats import pearsonr
+import statsmodels.api as sm
+
 
 st.markdown("""
     <style>
@@ -71,7 +75,7 @@ menu = st.sidebar.selectbox(
     ]
 )
 
-st.sidebar.markdown("<br><br><br><br><br>", unsafe_allow_html=True)
+st.sidebar.markdown("<br><br>", unsafe_allow_html=True)
 
 # Identitas tim
 st.sidebar.markdown("""---""")
@@ -278,9 +282,6 @@ elif menu == "Persentase Realisasi TKDD per Provinsi (2023)":
             data_clean_tkdd['Realisasi TKDD'] / data_clean_tkdd['Pagu TKDD']
         ) * 100
 
-    import matplotlib.pyplot as plt
-    import seaborn as sns
-
     df_sorted = data_clean_tkdd.sort_values(by='Persentase Realisasi TKDD', ascending=False).reset_index(drop=True)
 
     fig, ax = plt.subplots(figsize=(12, 10))
@@ -417,8 +418,6 @@ Bahkan, variabel seperti **persentase penduduk miskin** dan **APBN per kapita** 
     # 3. Regresi Linear
     st.write("### Regresi Linier Berganda: Prediktor terhadap Realisasi TKDD")
 
-    import statsmodels.api as sm
-
     Y = data_clean_all['Realisasi TKDD']
     X = data_clean_all[variabels]
     X = sm.add_constant(X)
@@ -485,10 +484,6 @@ elif menu == "Hubungan Realisasi TKDD dan IPM":
     # Scatter Plot + Pearson
     st.write("### Scatter Plot: IPM vs Realisasi TKDD")
 
-    from scipy.stats import pearsonr
-    import matplotlib.pyplot as plt
-    import seaborn as sns
-
     corr, pval = pearsonr(data_clean_all['IPM'], data_clean_all['Realisasi TKDD'])
 
     fig1, ax = plt.subplots(figsize=(8, 6))
@@ -526,9 +521,6 @@ Berdasarkan **scatter plot antara Indeks Pembangunan Manusia (IPM) dan Realisasi
     # ========================
     # Uji Chi-Square
     st.write("### Uji Chi-Square: Kategori IPM vs Persentase Realisasi TKDD")
-
-    import pandas as pd
-    import scipy.stats as stats
 
     urutan_ipm = ["Sangat Tinggi", "Tinggi", "Sedang"]
     data_clean_all['Kategori IPM'] = pd.Categorical(data_clean_all['Kategori IPM'], categories=urutan_ipm, ordered=True)
@@ -580,9 +572,6 @@ elif menu == "Analisis Faktor-faktor yang Mempengaruhi IPM":
     # ========================
     # 1. Scatter Plot Grid
     st.write("### Scatter Plot: Faktor-faktor terhadap IPM")
-
-    import matplotlib.pyplot as plt
-    import seaborn as sns
 
     variabels = [
         'Pagu TKDD',
@@ -693,9 +682,6 @@ Begitu pula:
     # ========================
     # 3. Regresi Linier
     st.write("### Regresi Linier Berganda: Prediktor terhadap IPM")
-
-    import statsmodels.api as sm
-    import pandas as pd
 
     Y = data_clean_all['IPM']
     X = data_clean_all[['Realisasi TKDD', 'Pagu TKDD', 'Jumlah Penduduk', 
