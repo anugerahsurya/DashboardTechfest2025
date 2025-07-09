@@ -53,13 +53,13 @@ st.markdown("""
 
 # ======================================
 # Judul halaman utama
-st.title("Analisis Pagu dan Realisasi TKDD")
+st.title("Efektivitas Penyaluran Dana Transfer ke Daerah (TKDD): Studi Perbandingan Pagu dan Realisasi TKDD di Provinsi-Provinsi Indonesia Tahun 2023")
 
 # Sidebar menu
-st.sidebar.title("Menu Visualisasi")
+st.sidebar.title("DATA ANALYTICS - TECHNOLOGY FESTIVAL (TECHFEST) 2025")
 # Ganti radio menjadi selectbox
 menu = st.sidebar.selectbox(
-    "Pilih Halaman Visualisasi",
+    "Pokok Bahasan Analisis",
     [
         "Perbandingan Pagu dan Realisasi TKDD",
         "Persentase Realisasi TKDD per Provinsi (2023)",
