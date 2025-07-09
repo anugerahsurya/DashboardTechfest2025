@@ -8,7 +8,7 @@ st.markdown("""
     <style>
     /* 🌿 Warna sidebar */
     [data-testid="stSidebar"] {
-        background-color: #d0f0c0;
+        background-color: #4682B4;
     }
 
     /* ✅ Bungkus teks panjang */
@@ -81,7 +81,7 @@ data_clean_tkdd = load_data()
 # ======================================
 # Halaman Ringkasan Data
 if menu == "Perbandingan Pagu dan Realisasi TKDD":
-    st.subheader("Perbandingan Pagu dan Realisasi TKDD untuk Setiap Wilayah")
+    st.subheader("Perbandingan Pagu dan Realisasi TKDD Antar Provinsi")
 
     # Hitung persentase jika belum ada
     if 'Persentase Realisasi TKDD' not in data_clean_tkdd.columns:
@@ -89,48 +89,98 @@ if menu == "Perbandingan Pagu dan Realisasi TKDD":
             data_clean_tkdd['Realisasi TKDD'] / data_clean_tkdd['Pagu TKDD']
         ) * 100
 
-    # ============================
-    # ✅ 1. Stacked Bar Chart 100%
-
+    # Urutkan data
     df_sorted = data_clean_tkdd.sort_values(by='Persentase Realisasi TKDD', ascending=False).copy()
-    total = df_sorted['Pagu TKDD'] + df_sorted['Realisasi TKDD']
-    df_sorted['Pagu (%)'] = df_sorted['Pagu TKDD'] / total * 100
-    df_sorted['Realisasi (%)'] = df_sorted['Realisasi TKDD'] / total * 100
 
+    # ========== 1. Clustered Bar Chart ==========
     fig1, ax1 = plt.subplots(figsize=(14, 6))
+    bar_width = 0.4
     index = np.arange(len(df_sorted))
-    bar_width = 0.6
 
-    ax1.bar(index, df_sorted['Pagu (%)'], bar_width, label='Pagu TKDD')
-    ax1.bar(index, df_sorted['Realisasi (%)'], bar_width, bottom=df_sorted['Pagu (%)'], label='Realisasi TKDD')
+    ax1.bar(index, df_sorted['Pagu TKDD'], bar_width, label='Pagu TKDD')
+    ax1.bar(index + bar_width, df_sorted['Realisasi TKDD'], bar_width, label='Realisasi TKDD')
 
-    ax1.set_xticks(index)
+    ax1.set_xlabel('Provinsi')
+    ax1.set_ylabel('Nilai (Rp)')
+    ax1.set_title('Perbandingan Pagu dan Realisasi TKDD per Provinsi')
+    ax1.set_xticks(index + bar_width / 2)
     ax1.set_xticklabels(df_sorted['Provinsi'], rotation=90)
-    ax1.set_ylabel('Persentase (%)')
-    ax1.set_title('Stacked Bar Chart 100%: Pagu vs Realisasi TKDD per Provinsi')
     ax1.legend()
     plt.tight_layout()
     st.pyplot(fig1)
 
-    # ============================
-    # ✅ 2. Clustered Bar Chart
-    st.subheader("Perbandingan Pagu dan Realisasi TKDD Antar Provinsi")
+    st.markdown("""
+    ### Penjelasan Visualisasi Pagu dan Realisasi TKDD
+
+    Berdasarkan **grouped bar chart** perbandingan antara **Pagu TKDD** dan **Realisasi TKDD** di setiap provinsi di Indonesia tahun **2023**, terlihat bahwa sebagian besar provinsi mampu merealisasikan dana TKDD dengan cukup baik, di mana nilai realisasi mendekati atau bahkan sedikit melampaui pagu yang telah ditetapkan.
+
+    Hal ini mencerminkan **efektivitas penyerapan anggaran** di banyak daerah, terutama di provinsi-provinsi besar seperti:
+    - **Jawa Barat**
+    - **Jawa Timur**
+    - **Jawa Tengah**
+    - **Sumatera Utara**
+
+    yang juga mendapatkan alokasi dana tertinggi.
+
+    Namun demikian, terdapat beberapa provinsi yang menunjukkan **selisih cukup besar** antara pagu dan realisasi, seperti:
+    - **DKI Jakarta**
+    - **Kalimantan Selatan**
+    - Beberapa provinsi baru di **Papua**
+
+    Kondisi ini dapat mengindikasikan adanya kendala dalam serapan anggaran, yang mungkin disebabkan oleh:
+    - Kapasitas kelembagaan yang masih terbatas
+    - Kondisi geografis yang sulit dijangkau
+    - Proses administrasi yang belum optimal
+
+    Di sisi lain, terdapat provinsi yang realisasinya **melebihi pagu**, seperti:
+    - **Aceh**
+    - **Sumatera Selatan**
+
+    yang menunjukkan adanya kemungkinan **penyesuaian atau tambahan anggaran di tengah tahun**.
+
+    **Kesimpulan:**  
+    Besarnya pagu tidak selalu berbanding lurus dengan realisasi. Oleh karena itu, efektivitas penggunaan anggaran tetap menjadi isu penting dalam **pemerataan pembangunan di tingkat daerah**.
+    """)
+
+    # ========== 2. Stacked Bar Chart 100% ==========
+    st.subheader("Perbandingan Pagu dan Realisasi TKDD untuk Setiap Wilayah")
+
+    total = df_sorted['Pagu TKDD'] + df_sorted['Realisasi TKDD']
+    df_sorted['Pagu (%)'] = df_sorted['Pagu TKDD'] / total * 100
+    df_sorted['Realisasi (%)'] = df_sorted['Realisasi TKDD'] / total * 100
 
     fig2, ax2 = plt.subplots(figsize=(14, 6))
-    bar_width = 0.4
     index = np.arange(len(df_sorted))
+    bar_width = 0.6
 
-    ax2.bar(index, df_sorted['Pagu TKDD'], bar_width, label='Pagu TKDD')
-    ax2.bar(index + bar_width, df_sorted['Realisasi TKDD'], bar_width, label='Realisasi TKDD')
+    ax2.bar(index, df_sorted['Pagu (%)'], bar_width, label='Pagu TKDD')
+    ax2.bar(index, df_sorted['Realisasi (%)'], bar_width, bottom=df_sorted['Pagu (%)'], label='Realisasi TKDD')
 
-    ax2.set_xlabel('Provinsi')
-    ax2.set_ylabel('Nilai (Rp)')
-    ax2.set_title('Perbandingan Pagu dan Realisasi TKDD per Provinsi')
-    ax2.set_xticks(index + bar_width / 2)
+    ax2.set_xticks(index)
     ax2.set_xticklabels(df_sorted['Provinsi'], rotation=90)
+    ax2.set_ylabel('Persentase (%)')
+    ax2.set_title('Stacked Bar Chart 100%: Pagu vs Realisasi TKDD per Provinsi')
     ax2.legend()
     plt.tight_layout()
     st.pyplot(fig2)
+
+    st.markdown("""
+    ### Penjelasan Visualisasi Proporsi Pagu dan Realisasi TKDD
+
+    Berdasarkan *stacked bar chart* yang menunjukkan perbandingan persentase Pagu TKDD dan Realisasi TKDD per provinsi tahun 2023, didapatkan gambaran mengenai proporsi serapan anggaran di seluruh provinsi Indonesia.
+
+    Terlihat bahwa sebagian besar provinsi memiliki rasio realisasi terhadap pagu yang cukup seimbang, di mana proporsi realisasi mendekati atau hanya sedikit di bawah alokasi pagu.
+
+    Tidak terdapat perbedaan ekstrem antarprovinsi dalam hal proporsi serapan, yang mengindikasikan bahwa secara umum, pemerintah daerah mampu menyerap dana TKDD secara relatif konsisten di berbagai wilayah.
+
+    Namun demikian, masih terdapat beberapa provinsi yang menunjukkan porsi realisasi sedikit lebih rendah dibandingkan pagu, terutama di beberapa provinsi Papua dan Kalimantan. Hal ini bisa disebabkan oleh keterbatasan kapasitas fiskal, hambatan geografis, atau tantangan dalam implementasi program.
+
+    Sebaliknya, terdapat juga provinsi yang menunjukkan keseimbangan hampir sempurna atau bahkan realisasi yang sedikit lebih tinggi dari pagu. Ini mencerminkan efisiensi pelaksanaan anggaran atau adanya penyesuaian alokasi di tengah tahun.
+
+    **Kesimpulan:**  
+    Meskipun alokasi anggaran bervariasi antarprovinsi, tingkat serapan dana cenderung relatif seragam. Namun, tetap terdapat ruang untuk perbaikan, terutama di wilayah dengan tantangan geografis dan fiskal, guna meningkatkan efektivitas pelaksanaan anggaran secara nasional.
+    """)
+   
 
 elif menu == "Persentase Realisasi TKDD per Provinsi (2023)":
     st.subheader("Persentase Realisasi TKDD per Provinsi (2023)")
@@ -177,6 +227,19 @@ elif menu == "Persentase Realisasi TKDD per Provinsi (2023)":
     ax.set_xlim(0, max(df_sorted['Persentase Realisasi TKDD'].max() * 1.1, 105))
     plt.tight_layout()
     st.pyplot(fig)
+    st.markdown("""
+### Penjelasan Visualisasi Persentase Realisasi TKDD per Provinsi
+
+Berdasarkan visualisasi persentase realisasi TKDD per provinsi tahun 2023, provinsi dengan tingkat realisasi tertinggi adalah **Kalimantan Timur** yang mencapai **111,0%** dari pagu anggaran. Disusul oleh **Kalimantan Selatan (110,6%)** dan **Kepulauan Riau (109,8%)**. Tingginya tingkat realisasi di provinsi-provinsi ini menunjukkan kemampuan mereka dalam menyerap anggaran secara optimal bahkan melampaui target yang ditetapkan, yang bisa mencerminkan tingginya kebutuhan fiskal atau efisiensi dalam pengelolaan anggaran.
+
+Sementara itu, beberapa provinsi menunjukkan tingkat realisasi yang jauh lebih rendah dibandingkan provinsi lainnya. Provinsi dengan realisasi terendah adalah **Papua** dengan capaian **94,3%**, diikuti oleh **Papua Selatan (94,6%)** dan **Papua Pegunungan (94,7%)**. Tingkat realisasi yang rendah ini dapat mengindikasikan adanya kendala dalam pelaksanaan program, keterbatasan infrastruktur, atau hambatan administratif yang mempengaruhi serapan anggaran di wilayah-wilayah tersebut.
+
+Menariknya, terdapat juga provinsi yang merealisasikan anggarannya tepat **100%** sesuai dengan pagu yang dialokasikan, yaitu **Sumatera Utara**. Pencapaian ini mencerminkan perencanaan dan pelaksanaan anggaran yang presisi dan stabil, tanpa kelebihan maupun kekurangan dana yang signifikan.
+
+**Kesimpulan:**  
+Perbandingan ini menunjukkan bahwa meskipun mayoritas provinsi mampu merealisasikan dana TKDD mendekati atau bahkan melebihi pagu, terdapat variasi antarwilayah yang perlu diperhatikan untuk meningkatkan pemerataan efektivitas serapan anggaran di seluruh Indonesia.
+""")
+
     
 
 
